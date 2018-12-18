@@ -11,8 +11,6 @@ import '@/assets/svg-icons'
 import d2VueFiltersDate from '@d2-projects/vue-filters-date'
 // 功能插件
 import pluginError from '@/plugin/error'
-import pluginExport from '@d2-projects/vue-table-export'
-import pluginImport from '@d2-projects/vue-table-import'
 import pluginLog from '@/plugin/log'
 import pluginOpen from '@/plugin/open'
 
@@ -35,8 +33,6 @@ export default {
     Vue.use(d2VueFiltersDate)
     // 插件
     Vue.use(pluginError)
-    Vue.use(pluginExport)
-    Vue.use(pluginImport)
     Vue.use(pluginLog)
     Vue.use(pluginOpen)
   }

@@ -1,12 +1,5 @@
-import playground from './modules/playground'
-import frame from './modules/frame'
-import d2Crud from './modules/d2-crud'
-import plugins from './modules/plugins'
-import charts from './modules/charts'
-import components from './modules/components'
-import element from './modules/element'
-import filters from './modules/filters'
-import business from './modules/business'
+import demo from './modules/demo'
+import userPay from './modules/user-pay'
 
 import layoutHeaderAside from '@/layout/header-aside'
 
@@ -26,7 +19,7 @@ const frameIn = [
         path: 'index',
         name: 'index',
         meta,
-        component: () => import('@/pages/index')
+        component: () => import('@/pages/index/page')
       },
       // 刷新页面 必须保留
       {
@@ -54,15 +47,8 @@ const frameIn = [
       }
     ]
   },
-  playground,
-  frame,
-  d2Crud,
-  plugins,
-  charts,
-  components,
-  element,
-  filters,
-  business
+  demo,
+  userPay,
 ]
 
 /**
