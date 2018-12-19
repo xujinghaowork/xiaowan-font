@@ -9,27 +9,33 @@ import store from '@/store/index'
 import i18n from './i18n'
 // 核心插件
 import d2Admin from '@/plugin/d2admin'
+// [ 可选插件组件 ]D2-Crud
+import D2Crud from '@d2-projects/d2-crud'
 
 // 菜单和路由设置
 import router from './router'
 import menuAside from '@/menu/aside'
-import { frameInRoutes } from '@/router/routes'
+import {
+  frameInRoutes
+} from '@/router/routes'
 
 // 核心插件
 Vue.use(d2Admin)
+Vue.use(D2Crud)
 
 new Vue({
   router,
   store,
   i18n,
   render: h => h(App),
-  created () {
+  async created() {
     // 处理路由 得到每一级的路由设置
     this.$store.commit('d2admin/page/init', frameInRoutes)
+    let asidemenu = await menuAside.getList(this);
     // 设置侧边栏菜单
-    this.$store.commit('d2admin/menu/asideSet', menuAside)
+    this.$store.commit('d2admin/menu/asideSet', asidemenu)
   },
-  mounted () {
+  mounted() {
     // 用户登录后从数据库加载一系列的设置
     this.$store.dispatch('d2admin/account/load')
     // 获取并记录用户 UA

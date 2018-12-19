@@ -1,5 +1,6 @@
 import demo from './modules/demo'
-import userPay from './modules/user-pay'
+import user from './modules/user'
+import manage from './modules/manage'
 
 import layoutHeaderAside from '@/layout/header-aside'
 
@@ -48,7 +49,8 @@ const frameIn = [
     ]
   },
   demo,
-  userPay,
+  user,
+  manage,
 ]
 
 /**

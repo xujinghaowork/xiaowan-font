@@ -2,85 +2,129 @@
   <div class="page-login">
     <div class="page-login--layer page-login--layer-area">
       <ul class="circles">
-        <li v-for="n in 10" :key="n"></li>
+        <li
+          v-for="n in 10"
+          :key="n"
+        ></li>
       </ul>
     </div>
     <div
       class="page-login--layer page-login--layer-time"
-      flex="main:center cross:center">
+      flex="main:center cross:center"
+    >
       {{time}}
     </div>
     <div class="page-login--layer">
       <div
         class="page-login--content"
-        flex="dir:top main:justify cross:center box:justify">
-        <div class="page-login--content-header">
-          <p class="page-login--content-header-motto">
-            时间是一切财富中最宝贵的财富。 <span>—— 德奥弗拉斯多</span>
-          </p>
-        </div>
+        flex="dir:top main:center cross:center box:justify"
+      >
         <div
           class="page-login--content-main"
-          flex="dir:top main:center cross:center">
+          flex="dir:top main:center cross:center"
+        >
           <!-- logo -->
-          <img class="page-login--logo" src="./image/logo@2x.png">
+          <img
+            class="page-login--logo"
+            src="./image/logo@2x.png"
+          >
           <!-- 表单 -->
           <div class="page-login--form">
             <el-card shadow="never">
-              <el-form ref="loginForm" label-position="top" :rules="rules" :model="formLogin" size="default">
+              <el-form
+                ref="loginForm"
+                label-position="top"
+                :rules="rules"
+                :model="formLogin"
+                size="default"
+              >
                 <el-form-item prop="username">
-                  <el-input type="text" v-model="formLogin.username" placeholder="用户名">
-                    <i slot="prepend" class="fa fa-user-circle-o"></i>
+                  <el-input
+                    type="text"
+                    v-model="formLogin.username"
+                    placeholder="用户名"
+                  >
+                    <i
+                      slot="prepend"
+                      class="fa fa-user-circle-o"
+                    ></i>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                  <el-input type="password" v-model="formLogin.password" placeholder="密码">
-                    <i slot="prepend" class="fa fa-keyboard-o"></i>
+                  <el-input
+                    type="password"
+                    v-model="formLogin.password"
+                    placeholder="密码"
+                  >
+                    <i
+                      slot="prepend"
+                      class="fa fa-keyboard-o"
+                    ></i>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="code">
-                  <el-input type="text" v-model="formLogin.code" placeholder="- - - -">
+                  <el-input
+                    type="text"
+                    v-model="formLogin.code"
+                    placeholder="- - - -"
+                  >
                     <template slot="prepend">验证码</template>
                     <template slot="append">
-                      <img class="login-code" src="./image/login-code.png">
+                      <img
+                        class="login-code"
+                        src="./image/login-code.png"
+                      >
                     </template>
                   </el-input>
                 </el-form-item>
-                <el-button size="default" @click="submit" type="primary" class="button-login">登录</el-button>
+                <el-button
+                  size="default"
+                  @click="submit"
+                  type="primary"
+                  class="button-login"
+                >登录</el-button>
               </el-form>
             </el-card>
             <p
               class="page-login--options"
-              flex="main:justify cross:center">
-              <span><d2-icon name="question-circle"/> 忘记密码</span>
+              flex="main:justify cross:center"
+            >
+              <span>
+                <d2-icon name="question-circle" /> 忘记密码</span>
               <span>注册用户</span>
             </p>
             <!-- 快速登录按钮 -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
+            <el-button
+              class="page-login--quick"
+              size="default"
+              type="info"
+              @click="dialogVisible = true"
+            >
               快速选择用户（测试功能）
             </el-button>
           </div>
-        </div>
-        <div class="page-login--content-footer">
-          <p class="page-login--content-footer-options">
-            <a href="#">帮助</a>
-            <a href="#">隐私</a>
-            <a href="#">条款</a>
-          </p>
-          <p class="page-login--content-footer-copyright">
-            Copyright <d2-icon name="copyright"/> 2018 D2 Projects 开源组织出品 <a href="https://github.com/FairyEver">@FairyEver</a>
-          </p>
         </div>
       </div>
     </div>
     <el-dialog
       title="快速选择用户"
       :visible.sync="dialogVisible"
-      width="400px">
-      <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">
-        <el-col v-for="(user, index) in users" :key="index" :span="8">
-          <div class="page-login--quick-user" @click="handleUserBtnClick(user)">
-            <d2-icon name="user-circle-o"/>
+      width="400px"
+    >
+      <el-row
+        :gutter="10"
+        style="margin: -20px 0px -10px 0px;"
+      >
+        <el-col
+          v-for="(user, index) in users"
+          :key="index"
+          :span="8"
+        >
+          <div
+            class="page-login--quick-user"
+            @click="handleUserBtnClick(user)"
+          >
+            <d2-icon name="user-circle-o" />
             <span>{{user.name}}</span>
           </div>
         </el-col>
@@ -90,82 +134,76 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import { mapActions } from 'vuex'
+import dayjs from "dayjs";
+import { mapActions } from "vuex";
 export default {
-  data () {
+  data() {
     return {
       timeInterval: null,
-      time: dayjs().format('HH:mm:ss'),
+      time: dayjs().format("HH:mm:ss"),
       // 快速选择用户
       dialogVisible: false,
       users: [
         {
-          name: '管理员',
-          username: 'admin',
-          password: 'admin'
+          name: "管理员",
+          username: "admin",
+          password: "admin"
         },
         {
-          name: '编辑',
-          username: 'editor',
-          password: 'editor'
+          name: "编辑",
+          username: "editor",
+          password: "editor"
         },
         {
-          name: '用户1',
-          username: 'user1',
-          password: 'user1'
+          name: "用户1",
+          username: "user1",
+          password: "user1"
         }
       ],
       // 表单
       formLogin: {
-        username: 'admin',
-        password: 'admin',
-        code: 'v9am'
+        username: "admin",
+        password: "admin",
+        code: "v9am"
       },
       // 校验
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: "请输入用户名", trigger: "blur" }
         ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ],
-        code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
-        ]
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
       }
-    }
+    };
   },
-  mounted () {
+  mounted() {
     this.timeInterval = setInterval(() => {
-      this.refreshTime()
-    }, 1000)
+      this.refreshTime();
+    }, 1000);
   },
-  beforeDestroy () {
-    clearInterval(this.timeInterval)
+  beforeDestroy() {
+    clearInterval(this.timeInterval);
   },
   methods: {
-    ...mapActions('d2admin/account', [
-      'login'
-    ]),
-    refreshTime () {
-      this.time = dayjs().format('HH:mm:ss')
+    ...mapActions("d2admin/account", ["login"]),
+    refreshTime() {
+      this.time = dayjs().format("HH:mm:ss");
     },
     /**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息
      */
-    handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
-      this.submit()
+    handleUserBtnClick(user) {
+      this.formLogin.username = user.username;
+      this.formLogin.password = user.password;
+      // this.submit();
     },
     /**
      * @description 提交表单
      */
     // 提交登录信息
-    submit () {
-      this.$refs.loginForm.validate((valid) => {
+    submit() {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
@@ -174,25 +212,24 @@ export default {
             vm: this,
             username: this.formLogin.username,
             password: this.formLogin.password
-          })
-            .then(() => {
-              // 重定向对象不存在则返回顶层路径
-              this.$router.replace(this.$route.query.redirect || '/')
-            })
+          }).then(() => {
+            // 重定向对象不存在则返回顶层路径
+            this.$router.replace(this.$route.query.redirect || "/");
+          });
         } else {
           // 登录表单校验失败
-          this.$message.error('表单校验失败')
+          this.$message.error("表单校验失败");
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
 .page-login {
   @extend %unable-select;
-  $backgroundColor: #F0F2F5;
+  $backgroundColor: #f0f2f5;
   // ---
   background-color: $backgroundColor;
   height: 100%;
@@ -240,9 +277,13 @@ export default {
   // 登录表单
   .page-login--form {
     width: 280px;
+    .el-card__body {
+      background-color: rgba(255, 255, 255, 0.5) !important;
+    }
     // 卡片
     .el-card {
       margin-bottom: 15px;
+      background-color: rgba(255, 255, 255, 0.5) !important;
     }
     // 登录按钮
     .button-login {
@@ -334,16 +375,16 @@ export default {
       list-style: none;
       width: 20px;
       height: 20px;
-      background: #FFF;
+      background: #fff;
       animation: animate 25s linear infinite;
       bottom: -200px;
       @keyframes animate {
-        0%{
+        0% {
           transform: translateY(0) rotate(0deg);
           opacity: 1;
           border-radius: 0;
         }
-        100%{
+        100% {
           transform: translateY(-1000px) rotate(720deg);
           opacity: 0;
           border-radius: 50%;
