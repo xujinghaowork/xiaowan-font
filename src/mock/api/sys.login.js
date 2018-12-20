@@ -11,7 +11,8 @@ const userDB = [{
     password: 'editor',
     uuid: 'editor-uuid',
     name: '编辑',
-    role: 'user'
+    role: 'manage',
+    menuList: ['用户管理','角色管理','公告管理']
   },
   {
     username: 'user1',

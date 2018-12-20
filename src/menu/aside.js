@@ -1,10 +1,6 @@
 import {
   AccountLogin
 } from '@api/sys.login'
-import {
-  mapState,
-  mapActions
-} from 'vuex'
 
 // 菜单 侧边栏
 let asideMenu = {};
@@ -118,6 +114,7 @@ function matchAuthorityToList(res) {
           }
         }
       }
+      matchList = [...publicMenu, ...matchList];
     }
   }
   return matchList;
