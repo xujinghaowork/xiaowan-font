@@ -196,6 +196,7 @@ export default {
     handleUserBtnClick(user) {
       this.formLogin.username = user.username;
       this.formLogin.password = user.password;
+      this.dialogVisible = false;
       // this.submit();
     },
     /**

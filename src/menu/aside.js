@@ -1,6 +1,10 @@
 import {
   AccountLogin
 } from '@api/sys.login'
+import {
+  mapState,
+  mapActions
+} from 'vuex'
 
 // 菜单 侧边栏
 let asideMenu = {};
@@ -75,14 +79,22 @@ let manageMenu = [
 
 // 获取菜单
 asideMenu.getList = async function (vm, name) {
-  let res;
-  if(!name){
-    name = 'admin';
+  let userInfo = await vm.$store.dispatch('d2admin/db/get', {
+    dbName: 'sys',
+    path: 'user.info',
+    user: true
+  }, {
+    root: true
+  });
+  let username = userInfo.username;
+  if (!username) {
+    username = name;
   }
+  let res;
   try {
     res = await AccountLogin({
-      username: name,
-      password: name
+      username: username,
+      password: username
     });
   } catch (error) {}
   if (res) {

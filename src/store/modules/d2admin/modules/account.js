@@ -40,12 +40,13 @@ export default {
             // 设置 vuex 用户信息
             await dispatch('d2admin/user/set', {
               name: res.name,
+              username:res.username,
               role: 'manage',
               menuList: [],
             }, {
               root: true
             })
-            let asidemenu = await menuAside.getList(this,res.username);
+            let asidemenu = await menuAside.getList(vm,res.username);
             // 设置侧边栏菜单
             vm.$store.commit('d2admin/menu/asideSet', asidemenu)
             // 用户登录后从持久化数据加载一系列的设置

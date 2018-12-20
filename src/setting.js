@@ -70,6 +70,7 @@ export default {
       name: 'Ghost',
       role:'user',
       menuList:[],
+      username:''
     }
   }
 }
