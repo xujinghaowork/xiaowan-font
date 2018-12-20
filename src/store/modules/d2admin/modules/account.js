@@ -4,6 +4,7 @@ import {
 } from '@api/sys.login'
 import menuAside from '@/menu/aside'
 
+
 export default {
   namespaced: true,
   actions: {
@@ -44,8 +45,9 @@ export default {
             }, {
               root: true
             })
+            let asidemenu = await menuAside.getList(this,res.username);
             // 设置侧边栏菜单
-            vm.$store.commit('d2admin/menu/asideSet', menuAside)
+            vm.$store.commit('d2admin/menu/asideSet', asidemenu)
             // 用户登录后从持久化数据加载一系列的设置
             await dispatch('load')
             // 结束

@@ -10,6 +10,8 @@ export default {
   component: layoutHeaderAside,
   children: (pre => [
     { path: 'announcement', name: `${pre}announcement`, component: () => import('@/pages/xiaowan/manage/announcement/index'), meta: { meta, title: '公告管理' } },
+    { path: 'announcement/add', name: `${pre}announcement-add`, component: () => import('@/pages/xiaowan/manage/announcement/add'), meta: { meta, title: '添加公告' } },
+    { path: 'announcement/message/:id', name: `${pre}announcement-message`, component: () => import('@/pages/xiaowan/manage/announcement/message'), meta: { meta, title: '修改公告' } },
     { path: 'pay', name: `${pre}pay`, component: () => import('@/pages/xiaowan/manage/pay/index'), meta: { meta, title: '缴费管理' } },
     { path: 'complaint', name: `${pre}complaint`, component: () => import('@/pages/xiaowan/manage/complaint/index'), meta: { meta, title: '投诉管理' } },
     { path: 'repair', name: `${pre}repair`, component: () => import('@/pages/xiaowan/manage/repair/index'), meta: { meta, title: '报修管理' } },

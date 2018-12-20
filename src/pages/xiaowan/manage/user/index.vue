@@ -8,10 +8,6 @@
             <el-input placeholder="账号" v-model="searchForm.userName"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-date-picker v-model="searchForm.date" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item>
             <el-select v-model="searchForm.status" style="width:120px;" placeholder="状态">
               <el-option v-for="item in optionsStatus" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -145,12 +141,6 @@ export default {
       totalTable: 1,
       searchForm: {
         userName: "",
-        date: "",
-        status: "0"
-      },
-      afterSearchForm: {
-        userName: "",
-        date: "",
         status: "0"
       },
       tableLoading: false,

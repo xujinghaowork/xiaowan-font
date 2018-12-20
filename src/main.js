@@ -11,6 +11,8 @@ import i18n from './i18n'
 import d2Admin from '@/plugin/d2admin'
 // [ 可选插件组件 ]D2-Crud
 import D2Crud from '@d2-projects/d2-crud'
+// [ 可选插件组件 ] UEditor
+import VueUeditorWrap from 'vue-ueditor-wrap'
 
 // 菜单和路由设置
 import router from './router'
@@ -21,7 +23,10 @@ import {
 
 // 核心插件
 Vue.use(d2Admin)
+// D2表格插件
 Vue.use(D2Crud)
+// 富文本编辑器
+Vue.component('VueUeditorWrap', VueUeditorWrap)
 
 new Vue({
   router,
@@ -31,7 +36,7 @@ new Vue({
   async created() {
     // 处理路由 得到每一级的路由设置
     this.$store.commit('d2admin/page/init', frameInRoutes)
-    let asidemenu = await menuAside.getList(this);
+    let asidemenu = await menuAside.getList(this,'');
     // 设置侧边栏菜单
     this.$store.commit('d2admin/menu/asideSet', asidemenu)
   },

@@ -1,48 +1,123 @@
 <template>
   <d2-container type="card">
-    <template slot="header">公告管理</template>
+    <template slot="header">公告管理
+    </template>
     <el-row>
-      <el-col :span="24">
-        <el-form :inline="true" class="demo-form-inline">
+      <el-col :span="20">
+        <el-form
+          :inline="true"
+          class="demo-form-inline"
+        >
           <el-form-item>
-            <el-input placeholder="账号" v-model="searchForm.userName"></el-input>
+            <el-input v-model="searchForm.keyWord" placeholder="输入标题或者关键字"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-date-picker v-model="searchForm.date" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+            <el-date-picker
+              v-model="searchForm.date"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+              type="date"
+              placeholder="选择日期"
+            >
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="searchForm.status" style="width:120px;" placeholder="状态">
-              <el-option v-for="item in optionsStatus" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+            <el-button type="primary">查询</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="searchResult">查询</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="exportExcel">
-              <d2-icon name="download" />
-              导出 Excel
-            </el-button>
-          </el-form-item>
+          <el-button
+            type="primary"
+            @click="add"
+          >
+            添加
+          </el-button>
         </el-form>
       </el-col>
     </el-row>
     <div>
-      <d2-crud :loading='tableLoading'  @edit="editAnc" @del='delAnc' @recharge="handleCustomEvent" :rowHandle="rowHandle" :columns="columnsTable" :data="dataTable" :options="optionsTable" />
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[50, 100, 200, 400]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalTable">
+      <d2-crud
+        :loading='tableLoading'
+        @edit="editAnc"
+        @del='delAnc'
+        :rowHandle="rowHandle"
+        :columns="columnsTable"
+        :data="dataTable"
+        :options="optionsTable"
+        index-row
+      />
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[50, 100, 200, 400]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalTable"
+      >
       </el-pagination>
     </div>
-    <el-dialog @close="closeDialog" :title="dialogTitle" :visible.sync="dialogFormVisible" v-loading='formLoading' width="25%">
-      <el-form :rules='rules' :model="rechargeForm" ref="rechargeForm">
-        <el-form-item label="充值金额" label-width="80px" prop="rechargeAmount">
-          <el-input v-model="rechargeForm.rechargeAmount" auto-complete="off"></el-input>
-        </el-form-item>
+    <!-- 编辑 -->
+    <el-dialog
+      @close='editClose'
+      width="80%"
+      style="min-width:1400px;"
+      title="编辑公告"
+      :visible.sync="editDialog"
+    >
+      <el-form
+        ref="editForm"
+        :model="editForm"
+        label-width="80px"
+      >
+        <el-row
+          class="parameterformRow"
+          :gutter="20"
+        >
+          <el-col
+            class="parameterformRow-name"
+            :span="3"
+          >公告标题</el-col>
+          <el-col :span="16">
+            <el-form-item style="margin-left:8px;">
+              <el-input
+                style="width:600px;"
+                v-model="editForm.title"
+                maxlength="20"
+                placeholder="限制20字"
+              > </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row
+          class="parameterformRow"
+          :gutter="20"
+        >
+          <el-col
+            class="parameterformRow-name"
+            :span="3"
+          >公告标题</el-col>
+          <el-col :span="20">
+            <el-form-item
+              style="margin-left:8px;"
+              id="anousEditItem"
+            >
+              <d2-quill
+                @text-change="textChangeHandler"
+                style="min-height: 400px;"
+                v-model="editForm.content"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="rechargeSubmit">确 定</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="editDialog = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="editSubmit"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </d2-container>
@@ -52,57 +127,34 @@
 /* eslint-disable */
 export default {
   data() {
-    var rechargeAmount = (rule, value, callback) => {
-      var pa = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;
-      if (value === "") {
-        callback(new Error("请输入充值金额"));
-      } else if (!pa.test(value)) {
-        callback(new Error("充值金额格式错误"));
-      } else {
-        callback();
-      }
-    };
     return {
       columnsTable: [
         {
-          title: "ID",
-          key: "id",
-          resizable:true,
+          title: "标题",
+          key: "title",
+          resizable: true
         },
         {
-          title: "账户",
-          key: "userName",
-          resizable:true,
+          title: "发布人",
+          key: "createBy",
+          resizable: true
         },
-        // 格式化时间
         {
-          title: "注册时间",
-          key: "date",
-          sortable: true,
-          formatter(cellValue) {
-            return cellValue.date;
-          },
-          resizable:true,
-        },
-        // 按照大小排序
+          title: "发布时间",
+          key: "time",
+          resizable: true
+        }
+      ],
+      dataTable: [
         {
-          title: "资格",
-          key: "score",
-          sortable: true,
-          sortMethod(a, b) {
-            return a.score - b.score
-          },
-          resizable:true,
-        },
+          title:'test',
+          createBy:'王兰花秀丽',
+          time:'2018-12-20',
+          id:'ascd',
+        }
       ],
       rowHandle: {
         custom: [
-          {
-            text: "充值",
-            type: "primary",
-            size: "middle",
-            emit: "recharge"
-          },
           {
             text: "修改",
             type: "primary",
@@ -117,89 +169,67 @@ export default {
           }
         ]
       },
-      dataTable: [
-        {
-          id: 1,
-          date: '2016-05-02',
-          userName: '王小虎',
-          score: 10000
-        },
-        {
-          id: 2,
-          date: '2016-05-04',
-          userName: '王小虎',
-          score: 20000
-        },
-      ],
       optionsTable: {
         defaultSort: {
-          prop: "registerDate",
+          prop: "date",
           order: "descending"
         },
-        border:true,
+        highlightCurrentRow: true,
+        border: true
       },
-      optionsStatus: [
-        {
-          value: "0",
-          label: "所有状态"
-        },
-        {
-          value: "1",
-          label: "冻结"
-        },
-        {
-          value: "2",
-          label: "解冻"
-        }
-      ],
+      searchForm: {
+        date: "",
+        keyWord: ""
+      },
       pageSize: 100,
       currentPage: 1,
       totalTable: 1,
-      searchForm: {
-        userName: "",
-        date: "",
-        status: "0"
-      },
-      afterSearchForm: {
-        userName: "",
-        date: "",
-        status: "0"
-      },
+      valueStatus: "",
       tableLoading: false,
-      dialogFormVisible: false,
-      rechargeForm: {
-        rechargeAmount: 0
+      //编辑
+      editForm: {
+        //标题
+        title: "",
+        //内容
+        content: "",
+        id: ""
       },
-      // 校验
-      rules: {
-        rechargeAmount: [{ validator: rechargeAmount, trigger: "blur" }]
-      },
-      formLoading: false,
-      //用户充值的id
-      userId: "",
-      userName: "",
-      dialogTitle: "",
-      url:'/api/member/exportMember',
+      editDialog: false,
+      editDialogloading: false,
+      delForm: {
+        id: ""
+      }
     };
   },
   methods: {
-    xhrRequset() {
+    add() {
+      this.$router.push({ path: "/manage/announcement/add" });
+    },
+    xhrRequset() {},
+    editAnc({ index, row }) {
       let vm = this;
+      let path = "/manage/announcement/message/" + row.id;
+      this.$router.push({ path: path });
     },
-    searchResult() {
-      this.xhrRequset();
-    },
-    closeDialog() {
-      this.$refs["rechargeForm"].resetFields();
-    },
-    rechargeSubmit() {
+    editClose() {},
+    textChangeHandler(delta, oldDelta, source) {},
+    delAnc({ index, row }) {
       let vm = this;
-      vm.formLoading = true;
-    },
-    handleCustomEvent({ index, row }) {
-      this.dialogFormVisible = true;
-      this.userId = row.userId;
-      this.userName = row.userName;
+      this.delForm.id = row.id;
+      this.$confirm("是否确认删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+         
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -209,54 +239,21 @@ export default {
       this.currentPage = val;
       this.xhrRequset();
     },
-    exportExcel() {
-    },
-    editAnc({ index, row }) {
-      let vm = this;
-      let path = "/tkgn/announcementManage/message/" + row.id;
-      this.$router.push({ path: path });
-    },
-    delAnc({ index, row }) {
-      let vm =this;
-      this.delForm.id = row.id;
-      this.$confirm("是否确认删除?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          vm.$xhr
-            .announcementDel({
-              id: vm.delForm.id
-            })
-            .then(res => {
-              // 返回数据
-              if (res.code == 200) {
-                vm.addDialog = false;
-                vm.$message({
-                  type: "success",
-                  message: "删除成功",
-                  onClose() {
-                    vm.xhrRequset();
-                  }
-                });
-              }
-            })
-            .catch(err => {
-              // 异常情况
-              vm.addDialogloading = false;
-            });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
+
+    editSubmit() {}
   },
   mounted() {
     this.xhrRequset();
   }
 };
 </script>
+
+<style>
+#anousAddItem .el-form-item__content {
+  line-height: 10px !important;
+}
+
+#anousEditItem .el-form-item__content {
+  line-height: 10px !important;
+}
+</style>

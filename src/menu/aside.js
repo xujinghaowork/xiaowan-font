@@ -74,15 +74,20 @@ let manageMenu = [
 ];
 
 // 获取菜单
-asideMenu.getList = async function (vm) {
+asideMenu.getList = async function (vm, name) {
   let res;
+  if(!name){
+    name = 'admin';
+  }
   try {
     res = await AccountLogin({
-      username: 'admin',
-      password: 'admin'
+      username: name,
+      password: name
     });
   } catch (error) {}
-  asideMenu.list = matchAuthorityToList(res);
+  if (res) {
+    asideMenu.list = matchAuthorityToList(res);
+  }
   return asideMenu.list;
 }
 //根据后台传的权限列表对应侧边栏数组
@@ -95,8 +100,8 @@ function matchAuthorityToList(res) {
       matchList = [...publicMenu, ...manageMenu];
     } else {
       for (let i = 0; i < res.menuList.length; i++) {
-        for(let j=0;j<manageMenu.length;j++){
-          if(manageMenu[j].title == res.menuList[i]){
+        for (let j = 0; j < manageMenu.length; j++) {
+          if (manageMenu[j].title == res.menuList[i]) {
             matchList.push(manageMenu[j]);
           }
         }
